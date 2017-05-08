@@ -48,7 +48,7 @@ def is_letter(char):
 
 def is_empty(string):
     regex = re.compile("\s*")
-    if regex.fullmatch(string) is  None:
+    if regex.fullmatch(string) is None:
         return False
     else:
         return True

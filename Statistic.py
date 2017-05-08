@@ -16,9 +16,9 @@ def make_ngrams(words_set, n):
             words.popleft()
     return n_grams
 
+
 def statistic_sort(tuple):
     return tuple[0]
-
 
 
 def make_statistic(words, ngram_size=3):
@@ -35,7 +35,6 @@ def make_statistic(words, ngram_size=3):
 def main():
     words = Reader.read_words("BigText.txt")
     make_statistic(words)
-
 
 
 if __name__ == '__main__':
