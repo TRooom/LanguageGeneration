@@ -1,11 +1,15 @@
 import re
+EXAMPLE_FILENAME = "Example.txt"
+REGEX_EMPTY_STRING = re.compile("\s*")
+REGEX_LETTER = re.compile("[А-Яа-я0-9eEёЁ\-]")
+REGEX_VALID_WORDS = re.compile("[^А-Яа-я0-9,.:;-?! ]")
+PUNCTUATION = "?!.,:;"
 
 
-def read_words(filename):
-    file = open(filename, encoding="cp1251")
-    valid_words = re.compile("[^А-Яа-я0-9,.:;-?! ]")
+def read_words(filename, encoding="utf-8"):
+    file = open(filename, encoding=encoding)
     for line in file.readlines():
-        correct_string = fix_sentence(valid_words.sub("", line.lower()))
+        correct_string = fix_sentence(REGEX_VALID_WORDS.sub("", line.lower()))
         words = correct_string.split(" ")
         for word in words:
             if not is_empty(word):
@@ -14,7 +18,6 @@ def read_words(filename):
 
 
 def fix_sentence(sentence):
-    punctuation = "?!.,:;"
     word_ended = False
     chars = []
     for char in sentence:
@@ -28,7 +31,7 @@ def fix_sentence(sentence):
             word_ended = True
         elif char == "-" and not word_ended:
             chars.append(char)
-        elif char in punctuation and len(chars) > 0:
+        elif char in PUNCTUATION and len(chars) > 0:
             previous = chars.pop()
             chars.append(previous)
             if is_letter(previous):
@@ -40,23 +43,18 @@ def fix_sentence(sentence):
 
 
 def is_letter(char):
-    letters = re.compile("[А-Яа-я0-9eEёЁ\-]")
     if len(char) != 1:
         return False
-    return letters.search(char) is not None
+    return REGEX_LETTER.search(char) is not None
 
 
 def is_empty(string):
-    regex = re.compile("\s*")
-    if regex.fullmatch(string) is None:
-        return False
-    else:
-        return True
+    return not REGEX_EMPTY_STRING.fullmatch(string) is None
 
 
-def print_words():
-    for w in read_words("Text.txt"):
-        print(w)
+def print_words(filename=EXAMPLE_FILENAME):
+    words = list(read_words(filename))
+    print(" ".join(words))
 
 
 def main():
