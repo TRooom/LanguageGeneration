@@ -1,7 +1,8 @@
 import re
+
 EXAMPLE_FILENAME = "Example.txt"
 REGEX_EMPTY_STRING = re.compile("\s*")
-REGEX_LETTER = re.compile("[А-Яа-я0-9eEёЁ\-]")
+REGEX_LETTER = re.compile("[А-Яа-я0-9eEёЁ]")
 REGEX_VALID_WORDS = re.compile("[^А-Яа-я0-9,.:;-?! ]")
 PUNCTUATION = "?!.,:;"
 
@@ -49,17 +50,16 @@ def is_letter(char):
 
 
 def is_empty(string):
-    return not REGEX_EMPTY_STRING.fullmatch(string) is None
+    return REGEX_EMPTY_STRING.fullmatch(string) is not None or len(string) == 0
+
+# def print_words(filename=EXAMPLE_FILENAME):
+#     words = list(read_words(filename))
+#     print(" ".join(words))
 
 
-def print_words(filename=EXAMPLE_FILENAME):
-    words = list(read_words(filename))
-    print(" ".join(words))
-
-
-def main():
-    print_words()
-
-
-if __name__ == '__main__':
-    main()
+# def main():
+#     print_words()
+#
+#
+# if __name__ == '__main__':
+#     main()

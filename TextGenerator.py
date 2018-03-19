@@ -1,4 +1,4 @@
-import statistic as stat
+import Statistic as stat
 import random as rnd
 import math
 import argparse
@@ -8,8 +8,8 @@ import re
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--count", default=50, type=int, help="set sentence count")
-    parser.add_argument("-f", "--factor", type=int, default=0.7, help="set selective factor")
-    parser.add_argument("-s", "--statistic", type=str, help="statistic file")
+    parser.add_argument("-f", "--factor", type=float, default=0.7, help="set selective factor")
+    parser.add_argument("-s", "--statistic", default="statistic.txt", type=str, help="statistic file")
     return parser.parse_args()
 
 
@@ -26,8 +26,8 @@ def create_text(continuation_of_words, sentence_count):
 
 
 def fix_text(text):
-    regex = re.compile(" (?=[,.?!])")
-    return regex\
+    regex = re.compile(" (?=[,.?!;])")
+    return regex \
         .sub("", text)
 
 
@@ -53,26 +53,16 @@ def make_headword(word):
     return word[0].upper() + word[1:]
 
 
-def unpack_tuple(tup):
-    for x in range(0, len(tup)):
-        yield tup[x]
-
-
 def take_most_frequent_n_grams(words_stat, factor):
     for key in words_stat:
         schedule = words_stat[key]
         result_length = int(math.ceil(len(schedule) * factor))
-        schedule.sort(key=lambda z: z[len(z) - 1])
+        schedule.sort(key=lambda z: z[len(z) - 1], reverse=True)
         new_list = []
         for x in range(0, result_length):
             temp = schedule[x][0:len(schedule[x]) - 1]
             new_list.append(temp)
         words_stat[key] = new_list
-
-
-def make_continuation_of_words(n_gram_statistic):
-    words_statistic = make_words_statistic(n_gram_statistic)
-    return words_statistic
 
 
 def make_words_statistic(statistic):
@@ -91,7 +81,7 @@ def make_words_statistic(statistic):
 def main():
     args = parse_args()
     statistic = stat.read_statistic(args.statistic)
-    words = make_continuation_of_words(statistic)
+    words = make_words_statistic(statistic)
     take_most_frequent_n_grams(words, args.factor)
     text = create_text(words, args.count)
     text = " ".join(text)

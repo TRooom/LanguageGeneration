@@ -1,4 +1,4 @@
-import textReader as reader
+import TextReader as reader
 from collections import deque
 import argparse
 import itertools
@@ -10,12 +10,12 @@ def parse_args():
                         default=["source.txt"], help="text file for creation ngrams")
     parser.add_argument("-s", "--statistic", nargs=1, metavar="FILENAME",
                         default="statistic.txt", help="file in which the statistics will be written")
-    parser.add_argument("-n", "-ngram", nargs=1, type=int, metavar="SIZE",
+    parser.add_argument("-n", "--ngram", nargs=1, type=int, metavar="SIZE",
                         default=3, help="set ngrams size")
     return parser.parse_args()
 
 
-def make_n_grams(words_set):
+def make_n_grams(words_set, n_gram_size):
     n_grams = {}
     words = deque()
     for word in words_set:
@@ -67,8 +67,7 @@ def parse_data(line):
     return data
 
 
-def main():
-    args = parse_args()
+def main(args):
     files = args.file
     stat_path = args.statistic
     n_gram_size = args.ngram
@@ -81,4 +80,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(parse_args())
